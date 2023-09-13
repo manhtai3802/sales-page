@@ -1,0 +1,22 @@
+.closeButton {
+  position: absolute !important;
+  top: 1rem;
+  right: 1rem;
+  z-index: 1;
+  color: red;
+}
+
+.menuButton {
+  padding: 0.5rem;
+}
+
+.title {
+  flex-grow: 1;
+  font-variant: normal;
+  color: white;
+}
+
+.link {
+  text-decoration: none;
+  color: white;
+}
