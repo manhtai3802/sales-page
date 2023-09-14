@@ -1,5 +1,5 @@
-import PropTypes from 'prop-types';
 import { TextField } from '@mui/material';
+import PropTypes from 'prop-types';
 import { Controller } from 'react-hook-form';
 
 InputField.propTypes = {
@@ -9,7 +9,7 @@ InputField.propTypes = {
   disabled: PropTypes.bool,
 };
 
-function InputField({ name, label, form, disabled }) {
+function InputField({ name, label, form }) {
   const {
     control,
     formState: { errors },

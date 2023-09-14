@@ -3,7 +3,6 @@
   top: 1rem;
   right: 1rem;
   z-index: 1;
-  color: red;
 }
 
 .menuButton {
@@ -19,4 +18,8 @@
 .link {
   text-decoration: none;
   color: white;
+}
+
+.button {
+  color: inherit;
 }

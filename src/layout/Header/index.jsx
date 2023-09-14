@@ -12,9 +12,16 @@ import Register from 'components/Auth/Register';
 import { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import './styles.scss';
+import Login from 'components/Auth/Login';
+
+const MODE = {
+  LOGIN: 'login',
+  REGISTER: 'register',
+};
 
 export default function Header() {
   const [open, setOpen] = useState(false);
+  const [mode, setMode] = useState(MODE.LOGIN);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -51,7 +58,27 @@ export default function Header() {
           </IconButton>
 
           <DialogContent>
-            <Register closeDialog={handleClose} />
+            {mode === MODE.REGISTER && (
+              <>
+                <Register closeDialog={handleClose} />
+                <Box textAlign="center">
+                  <Button color="primary" onClick={() => setMode(MODE.LOGIN)}>
+                    Already have an account. Login here
+                  </Button>
+                </Box>
+              </>
+            )}
+
+            {mode === MODE.LOGIN && (
+              <>
+                <Login closeDialog={handleClose} />
+                <Box textAlign="center">
+                  <Button color="primary" onClick={() => setMode(MODE.REGISTER)}>
+                    Don't have an account. Register here
+                  </Button>
+                </Box>
+              </>
+            )}
           </DialogContent>
         </Dialog>
       </AppBar>
