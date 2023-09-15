@@ -44,14 +44,13 @@ function LoginForm(props) {
   const classes = useStyles();
 
   const schema = yup.object({
-    email: yup.string().required('Please enter your email').email('Please enter a valid email'),
+    identifier: yup.string().required('Please enter your email').email('Please enter a valid email'),
     password: yup.string().required('Please enter your password'),
   });
 
   const form = useForm({
     defaultValues: {
-      fullName: '',
-      email: '',
+      identifier: '',
       password: '',
     },
     resolver: yupResolver(schema),
@@ -78,7 +77,7 @@ function LoginForm(props) {
         Sign In
       </Typography>
       <form onSubmit={form.handleSubmit(handleSubmit)}>
-        <InputField name="email" label="Email" form={form} />
+        <InputField name="identifier" label="Email" form={form} />
         <PasswordField name="password" label="Password" form={form} />
 
         <Button type="submit" className={classes.submit} variant="contained" color="primary" fullWidth>

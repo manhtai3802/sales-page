@@ -1,4 +1,4 @@
-import { Close } from '@mui/icons-material';
+import { AccountCircle, Close } from '@mui/icons-material';
 import MenuIcon from '@mui/icons-material/Menu';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -13,6 +13,9 @@ import { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import './styles.scss';
 import Login from 'components/Auth/Login';
+import { useDispatch, useSelector } from 'react-redux';
+import { Menu, MenuItem } from '@mui/material';
+import { logout } from 'components/Auth/userSlice';
 
 const MODE = {
   LOGIN: 'login',
@@ -20,8 +23,25 @@ const MODE = {
 };
 
 export default function Header() {
+  const dispatch = useDispatch();
+  const LoggedInUser = useSelector((state) => state.user.current);
+  const isLoggedIn = !!LoggedInUser.id;
   const [open, setOpen] = useState(false);
   const [mode, setMode] = useState(MODE.LOGIN);
+  const [anchorEl, setAnchorEL] = useState(null);
+
+  const handleUserClick = (event) => {
+    setAnchorEL(event.currentTarget);
+  };
+  const handleUserClose = () => {
+    setAnchorEL(null);
+  };
+
+  const handleLogoutClick = () => {
+    const action = logout();
+    dispatch(action);
+    setAnchorEL(null);
+  };
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -47,9 +67,16 @@ export default function Header() {
             <Button color="inherit">Counter</Button>
           </NavLink>
 
-          <Button onClick={handleClickOpen} color="inherit">
-            Register
-          </Button>
+          {!isLoggedIn && (
+            <Button onClick={handleClickOpen} color="inherit">
+              Login
+            </Button>
+          )}
+          {isLoggedIn && (
+            <IconButton color="inherit" onClick={handleUserClick}>
+              <AccountCircle />
+            </IconButton>
+          )}
         </Toolbar>
 
         <Dialog disableEscapeKeyDown open={open}>
@@ -58,17 +85,6 @@ export default function Header() {
           </IconButton>
 
           <DialogContent>
-            {mode === MODE.REGISTER && (
-              <>
-                <Register closeDialog={handleClose} />
-                <Box textAlign="center">
-                  <Button color="primary" onClick={() => setMode(MODE.LOGIN)}>
-                    Already have an account. Login here
-                  </Button>
-                </Box>
-              </>
-            )}
-
             {mode === MODE.LOGIN && (
               <>
                 <Login closeDialog={handleClose} />
@@ -79,9 +95,32 @@ export default function Header() {
                 </Box>
               </>
             )}
+
+            {mode === MODE.REGISTER && (
+              <>
+                <Register closeDialog={handleClose} />
+                <Box textAlign="center">
+                  <Button color="primary" onClick={() => setMode(MODE.LOGIN)}>
+                    Already have an account. Login here
+                  </Button>
+                </Box>
+              </>
+            )}
           </DialogContent>
         </Dialog>
       </AppBar>
+
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleUserClose}
+        MenuListProps={{
+          'aria-labelledby': 'basic-button',
+        }}
+      >
+        <MenuItem onClick={handleLogoutClick}>My account</MenuItem>
+        <MenuItem onClick={handleLogoutClick}>Logout</MenuItem>
+      </Menu>
     </Box>
   );
 }

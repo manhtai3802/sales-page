@@ -1,8 +1,9 @@
+import ProductFeature from 'Product';
+import Header from 'layout/Header';
 import { useEffect } from 'react';
+import { Route, Routes } from 'react-router-dom';
 import productApi from './api/productApi';
 import CounterFeature from './components/Counter';
-import { Route, Routes } from 'react-router-dom';
-import Header from 'layout/Header';
 
 function App() {
   useEffect(() => {
@@ -18,9 +19,10 @@ function App() {
   }, []);
   return (
     <div className="App">
+      <Header />
       <Routes>
-        <Route path="/" Component={Header}></Route>
         <Route path="/counter" Component={CounterFeature}></Route>
+        <Route path="/products" Component={ProductFeature}></Route>
       </Routes>
     </div>
   );
