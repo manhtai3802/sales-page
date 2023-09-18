@@ -22,7 +22,7 @@ function App() {
       <Header />
       <Routes>
         <Route path="/counter" Component={CounterFeature}></Route>
-        <Route path="/products" Component={ProductFeature}></Route>
+        <Route path="/products/*" Component={ProductFeature}></Route>
       </Routes>
     </div>
   );
