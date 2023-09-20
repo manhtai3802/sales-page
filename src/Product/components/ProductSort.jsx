@@ -8,12 +8,12 @@ ProductSort.propTypes = {
 };
 
 function ProductSort({ currentSort, onChange }) {
-  const handleChange = (event, newValue) => {
+  const handleSortChange = (event, newValue) => {
     if (onChange) onChange(newValue);
   };
 
   return (
-    <Tabs value={currentSort} onChange={handleChange} variant="fullWidth">
+    <Tabs value={currentSort} onChange={handleSortChange} variant="fullWidth">
       <Tab label="Sắp xếp thấp đến cao" value="salePrice:ASC" />
       <Tab label="Sắp xếp cao đến thấp" value="salePrice:DESC" />
     </Tabs>
