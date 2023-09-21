@@ -1,5 +1,6 @@
 import { Box, Container, Grid, Pagination, Paper } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import ProductFilter from 'Product/components/ProductFilter';
 import ProductList from 'Product/components/ProductList';
 import ProductSkeletonList from 'Product/components/ProductSkeletonList';
 import ProductSort from 'Product/components/ProductSort';
@@ -70,12 +71,22 @@ function ListPages(props) {
     setLoading(true);
   };
 
+  const handleFilterChange = (newFilters) => {
+    setFilter((prevFilter) => ({
+      ...prevFilter,
+      ...newFilters,
+    }));
+    setLoading(true);
+  };
+
   return (
     <Box>
       <Container>
         <Grid container spacing={1}>
           <Grid item className={classes.left}>
-            <Paper elevation={0}>Left</Paper>
+            <Paper elevation={0}>
+              <ProductFilter filters={filters} onChange={handleFilterChange} />
+            </Paper>
           </Grid>
           <Grid item className={classes.right}>
             <Paper elevation={0}>
