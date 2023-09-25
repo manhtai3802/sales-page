@@ -41,7 +41,6 @@ function FilterByPrice({ onChange }) {
     if (!onChange) return;
     onChange(salePrice);
 
-    //tìm kiếm xong xét giá trị về 0
     setSalePrice({
       salePrice_gte: 0,
       salePrice_lte: 0,

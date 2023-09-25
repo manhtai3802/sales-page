@@ -6,7 +6,9 @@ import ProductList from 'Product/components/ProductList';
 import ProductSkeletonList from 'Product/components/ProductSkeletonList';
 import ProductSort from 'Product/components/ProductSort';
 import productApi from 'api/productApi';
-import { useEffect, useState } from 'react';
+import queryString from 'query-string';
+import { useEffect, useMemo, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -29,23 +31,41 @@ const useStyles = makeStyles((theme) => ({
 
 function ListPages(props) {
   const [productList, setProductList] = useState([]);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const classes = useStyles();
   const [loading, setLoading] = useState(true);
-  const [filters, setFilter] = useState({
-    _page: 1,
-    _limit: 9,
-    _sort: 'salePrice:ASC',
-  });
+
+  const queryParams = useMemo(() => {
+    const params = queryString.parse(location.search);
+
+    return {
+      ...params,
+      _page: Number.parseInt(params._page) || 1,
+      _limit: Number.parseInt(params._limit) || 9,
+      _sort: params._sort || 'salePrice:ASC',
+      isPromotion: params.isPromotion === 'true',
+      isFreeShip: params.isFreeShip === 'true',
+    };
+  }, [location.search]);
+
   const [pagination, setPagination] = useState({
     limit: 9,
     total: 10,
     page: 1,
   });
-  const classes = useStyles();
+
+  const navigateFilters = (filters) => {
+    return navigate({
+      pathname: location.pathname,
+      search: queryString.stringify(filters),
+    });
+  };
 
   useEffect(() => {
     (async () => {
       try {
-        const { data, pagination } = await productApi.getAll(filters);
+        const { data, pagination } = await productApi.getAll(queryParams);
         setProductList(data);
         setPagination(pagination);
       } catch (error) {
@@ -54,34 +74,37 @@ function ListPages(props) {
 
       setLoading(false);
     })();
-  }, [filters]);
+  }, [queryParams]);
 
   const handlePageChange = (e, page) => {
-    setFilter((prevFilter) => ({
-      ...prevFilter,
+    const filters = {
+      ...queryParams,
       _page: page,
-    }));
+    };
+    navigateFilters(filters);
     setLoading(true);
   };
 
-  const handleSortChange = (newValue) => {
-    setFilter((prevFilter) => ({
-      ...prevFilter,
-      _sort: newValue,
-    }));
+  const handleSortChange = (sort) => {
+    const filters = {
+      ...queryParams,
+      _sort: sort,
+    };
+    navigateFilters(filters);
     setLoading(true);
   };
 
   const handleFilterChange = (newFilters) => {
-    setFilter((prevFilter) => ({
-      ...prevFilter,
+    const filters = {
+      ...queryParams,
       ...newFilters,
-    }));
+    };
+    navigateFilters(filters);
     setLoading(true);
   };
 
   const setNewFilters = (newFilters) => {
-    setFilter(newFilters);
+    navigateFilters(newFilters);
   };
 
   return (
@@ -90,13 +113,13 @@ function ListPages(props) {
         <Grid container spacing={1}>
           <Grid item className={classes.left}>
             <Paper elevation={0}>
-              <ProductFilter filters={filters} onChange={handleFilterChange} />
+              <ProductFilter filters={queryParams} onChange={handleFilterChange} />
             </Paper>
           </Grid>
           <Grid item className={classes.right}>
             <Paper elevation={0}>
-              <ProductSort currentSort={filters._sort} onChange={handleSortChange} />
-              <FilterViewer filters={filters} onChange={setNewFilters} data={productList} />
+              <ProductSort currentSort={queryParams._sort} onChange={handleSortChange} />
+              <FilterViewer filters={queryParams} onChange={setNewFilters} data={productList} />
 
               {loading ? <ProductSkeletonList length={9} /> : <ProductList data={productList} />}
 

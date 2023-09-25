@@ -17,6 +17,7 @@
     "lodash": "4.17.15",
     "notistack": "^3.0.1",
     "prop-types": "^15.8.1",
+    "query-string": "^8.1.0",
     "radium": "^0.26.2",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
