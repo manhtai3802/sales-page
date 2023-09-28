@@ -1,6 +1,8 @@
 import { Box, Container, Grid, Paper } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import AddToCardForm from 'Product/components/AddToCardForm';
 import ProductInfo from 'Product/components/ProductInfo';
+import ProductMenu from 'Product/components/ProductMenu';
 import ProductThumbnail from 'Product/components/ProductThumbnail';
 import useProductDetail from 'Product/hooks/useProductDetail';
 import { useParams } from 'react-router-dom';
@@ -31,6 +33,10 @@ function DetailPage(props) {
     return <Box>Loading</Box>;
   }
 
+  const handleAddToCard = (value) => {
+    console.log(value);
+  };
+
   return (
     <Box className={classes.root}>
       <Container>
@@ -41,9 +47,11 @@ function DetailPage(props) {
             </Grid>
             <Grid item className={classes.right}>
               <ProductInfo product={product} />
+              <AddToCardForm onSubmit={handleAddToCard} />
             </Grid>
           </Grid>
         </Paper>
+        <ProductMenu />
       </Container>
     </Box>
   );

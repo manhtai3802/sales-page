@@ -5,8 +5,8 @@ import { makeStyles } from '@mui/styles';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
-import PasswordField from '../PasswordField';
-import InputField from '../Textfield';
+import PasswordField from '../../FormControl/PasswordField';
+import InputField from '../../FormControl/Textfield';
 
 const useStyles = makeStyles((theme) => ({
   root: {
