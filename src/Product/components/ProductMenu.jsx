@@ -4,9 +4,11 @@ import { Link, Navigate, Route, Routes, useLocation, useParams } from 'react-rou
 import ProductAdditional from './ProductAdditional';
 import ProductDescription from './ProductDescription';
 import ProductReview from './ProductReview';
+import useProductDetail from 'Product/hooks/useProductDetail';
 
 function ProductMenu(props) {
   const { productId } = useParams();
+  const { product } = useProductDetail(productId);
   const pathnameReset = useLocation().pathname;
   const pathname = `/products/${productId}`;
   const [value, setValue] = useState(pathnameReset !== null ? pathnameReset : `${pathname}/description`);
@@ -29,7 +31,7 @@ function ProductMenu(props) {
       </Box>
       <Routes>
         <Route index element={<Navigate to={`${pathname}/description`} />} />
-        <Route path={`/description`} element={<ProductDescription />} />
+        <Route path={`/description`} element={<ProductDescription product={product} />} />
         <Route path={`/additional`} element={<ProductAdditional />} />
         <Route path={`/review`} element={<ProductReview />} />
       </Routes>

@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const counterReducer = createSlice({
+const cartSlice = createSlice({
   name: 'counter',
   initialState: 0,
   reducers: {
@@ -14,7 +14,7 @@ const counterReducer = createSlice({
   },
 });
 
-const { actions, reducer } = counterReducer;
+const { actions, reducer } = cartSlice;
 
 export const { increase, decrease } = actions;
 export default reducer;

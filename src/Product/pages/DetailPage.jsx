@@ -1,10 +1,12 @@
-import { Box, Container, Grid, Paper } from '@mui/material';
+import { Box, Container, Grid, LinearProgress, Paper } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import AddToCardForm from 'Product/components/AddToCardForm';
 import ProductInfo from 'Product/components/ProductInfo';
 import ProductMenu from 'Product/components/ProductMenu';
 import ProductThumbnail from 'Product/components/ProductThumbnail';
 import useProductDetail from 'Product/hooks/useProductDetail';
+import { addToCart } from 'components/Cart/cartSlice';
+import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
 DetailPage.propTypes = {};
@@ -22,19 +24,38 @@ const useStyles = makeStyles((theme) => ({
     padding: '12px',
     flex: '1 1 0',
   },
+
+  loading: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    width: '100%',
+  },
 }));
 
 function DetailPage(props) {
   const { productId } = useParams();
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   const { loading, product } = useProductDetail(productId);
   if (loading) {
-    return <Box>Loading</Box>;
+    return (
+      <Box className={classes.loading}>
+        <LinearProgress />
+      </Box>
+    );
   }
 
-  const handleAddToCard = (value) => {
-    console.log(value);
+  const handleAddToCard = ({ quantity }) => {
+    const action = addToCart({
+      id: product.id,
+      product,
+      quantity,
+    });
+
+    console.log(action);
+    dispatch(action);
   };
 
   return (

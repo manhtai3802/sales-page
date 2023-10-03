@@ -1,4 +1,4 @@
-import { AccountCircle, Close } from '@mui/icons-material';
+import { AccountCircle, Close, ShoppingCart } from '@mui/icons-material';
 import MenuIcon from '@mui/icons-material/Menu';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -10,12 +10,13 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Register from 'components/Auth/Register';
 import { useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import './styles.scss';
 import Login from 'components/Auth/Login';
 import { useDispatch, useSelector } from 'react-redux';
-import { Menu, MenuItem } from '@mui/material';
+import { Badge, Menu, MenuItem } from '@mui/material';
 import { logout } from 'components/Auth/userSlice';
+import { cartItemCountSelector } from 'components/Cart/selector';
 
 const MODE = {
   LOGIN: 'login',
@@ -24,7 +25,9 @@ const MODE = {
 
 export default function Header() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const LoggedInUser = useSelector((state) => state.user.current);
+  const cartItemCount = useSelector(cartItemCountSelector);
   const isLoggedIn = !!LoggedInUser.id;
   const [open, setOpen] = useState(false);
   const [mode, setMode] = useState(MODE.LOGIN);
@@ -41,6 +44,9 @@ export default function Header() {
     const action = logout();
     dispatch(action);
     setAnchorEL(null);
+  };
+  const handleCartClick = () => {
+    navigate('/cart');
   };
 
   const handleClickOpen = () => {
@@ -63,9 +69,18 @@ export default function Header() {
             </Link>
           </Typography>
 
+          <NavLink to="/products" className="link">
+            <Button color="inherit">Products</Button>
+          </NavLink>
           <NavLink to="/counter" className="link">
             <Button color="inherit">Counter</Button>
           </NavLink>
+
+          <IconButton size="large" aria-label="show 4 new mails" color="inherit" onClick={handleCartClick}>
+            <Badge badgeContent={cartItemCount} color="error">
+              <ShoppingCart />
+            </Badge>
+          </IconButton>
 
           {!isLoggedIn && (
             <Button onClick={handleClickOpen} color="inherit">
