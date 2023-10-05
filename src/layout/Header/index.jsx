@@ -1,5 +1,6 @@
 import { AccountCircle, Close, ShoppingCart } from '@mui/icons-material';
 import MenuIcon from '@mui/icons-material/Menu';
+import { Badge, Menu, MenuItem } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -8,15 +9,13 @@ import DialogContent from '@mui/material/DialogContent';
 import IconButton from '@mui/material/IconButton';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
+import Login from 'components/Auth/Login';
 import Register from 'components/Auth/Register';
+import { logout } from 'components/Auth/userSlice';
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import './styles.scss';
-import Login from 'components/Auth/Login';
-import { useDispatch, useSelector } from 'react-redux';
-import { Badge, Menu, MenuItem } from '@mui/material';
-import { logout } from 'components/Auth/userSlice';
-import { cartItemCountSelector } from 'components/Cart/selector';
 
 const MODE = {
   LOGIN: 'login',
@@ -27,12 +26,11 @@ export default function Header() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const LoggedInUser = useSelector((state) => state.user.current);
-  const cartItemCount = useSelector(cartItemCountSelector);
+  const countTotalCart = JSON.parse(localStorage?.getItem('countTotalCart')) || 0;
   const isLoggedIn = !!LoggedInUser.id;
   const [open, setOpen] = useState(false);
   const [mode, setMode] = useState(MODE.LOGIN);
   const [anchorEl, setAnchorEL] = useState(null);
-
   const handleUserClick = (event) => {
     setAnchorEL(event.currentTarget);
   };
@@ -77,7 +75,7 @@ export default function Header() {
           </NavLink>
 
           <IconButton size="large" aria-label="show 4 new mails" color="inherit" onClick={handleCartClick}>
-            <Badge badgeContent={cartItemCount} color="error">
+            <Badge badgeContent={countTotalCart} color="error">
               <ShoppingCart />
             </Badge>
           </IconButton>
