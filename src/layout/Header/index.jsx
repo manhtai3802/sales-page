@@ -16,6 +16,7 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import './styles.scss';
+import { cartItemCountSelector } from 'components/Cart/selector';
 
 const MODE = {
   LOGIN: 'login',
@@ -23,10 +24,10 @@ const MODE = {
 };
 
 export default function Header() {
+  const cartItemCount = useSelector(cartItemCountSelector);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const LoggedInUser = useSelector((state) => state.user.current);
-  const countTotalCart = JSON.parse(localStorage?.getItem('countTotalCart')) || 0;
   const isLoggedIn = !!LoggedInUser.id;
   const [open, setOpen] = useState(false);
   const [mode, setMode] = useState(MODE.LOGIN);
@@ -75,7 +76,7 @@ export default function Header() {
           </NavLink>
 
           <IconButton size="large" aria-label="show 4 new mails" color="inherit" onClick={handleCartClick}>
-            <Badge badgeContent={countTotalCart} color="error">
+            <Badge badgeContent={cartItemCount} color="error">
               <ShoppingCart />
             </Badge>
           </IconButton>

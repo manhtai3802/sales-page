@@ -48,48 +48,48 @@ function DetailPage(props) {
   }
 
   const handleAddToCard = ({ quantity }) => {
-    const newArr = [];
-    const getCartData = JSON.parse(localStorage?.getItem('cartData')) || [];
+    // const newArr = [];
+    // const getCartData = JSON.parse(localStorage?.getItem('cartData')) || [];
     const data = {
       id: product.id,
       product,
       quantity,
     };
-
-    if (getCartData === null) {
-      localStorage.setItem('cartData', JSON.stringify([data]));
-    } else {
-      newArr.push(...getCartData);
-      const index = newArr.findIndex((x) => x.id === data.id);
-      if (index >= 0) {
-        const { id, product } = newArr[index];
-        const newData = {
-          id,
-          product,
-          quantity: (newArr[index].quantity += data.quantity),
-        };
-
-        const newArrUpdated = newArr.filter((val) => val.id !== newData.id);
-        newArrUpdated.push(newData);
-        localStorage.setItem('cartData', JSON.stringify(newArrUpdated));
-        calculateCart(newArrUpdated);
-      } else {
-        newArr.push(data);
-        localStorage.setItem('cartData', JSON.stringify(newArr));
-        calculateCart(newArr);
-      }
-    }
     const action = addToCart(data);
     dispatch(action);
+
+    // if (getCartData === null) {
+    //   localStorage.setItem('cartData', JSON.stringify([data]));
+    // } else {
+    //   newArr.push(...getCartData);
+    //   const index = newArr.findIndex((x) => x.id === data.id);
+    //   if (index >= 0) {
+    //     const { id, product } = newArr[index];
+    //     const newData = {
+    //       id,
+    //       product,
+    //       quantity: (newArr[index].quantity += data.quantity),
+    //     };
+
+    //     const newArrUpdated = newArr.filter((val) => val.id !== newData.id);
+    //     newArrUpdated.push(newData);
+    //     localStorage.setItem('cartData', JSON.stringify(newArrUpdated));
+    //     calculateCart(newArrUpdated);
+    //   } else {
+    //     newArr.push(data);
+    //     localStorage.setItem('cartData', JSON.stringify(newArr));
+    //     calculateCart(newArr);
+    //   }
+    // }
   };
 
-  const calculateCart = (arrDataUpdated) => {
-    const arrCountCart = arrDataUpdated.map((val) => val.quantity);
-    const countTotalCart = arrCountCart.reduce((total, value) => {
-      return total + value;
-    }, 0);
-    localStorage.setItem('countTotalCart', JSON.stringify(countTotalCart));
-  };
+  // const calculateCart = (arrDataUpdated) => {
+  //   const arrCountCart = arrDataUpdated.map((val) => val.quantity);
+  //   const countTotalCart = arrCountCart.reduce((total, value) => {
+  //     return total + value;
+  //   }, 0);
+  //   localStorage.setItem('countTotalCart', JSON.stringify(countTotalCart));
+  // };
 
   return (
     <Box className={classes.root}>
