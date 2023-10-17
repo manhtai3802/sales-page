@@ -1,6 +1,6 @@
 import { AccountCircle, ShoppingCart } from '@mui/icons-material';
 import MenuIcon from '@mui/icons-material/Menu';
-import { Badge, Button, Drawer, IconButton, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
+import { Badge, Button, Drawer, IconButton, List, ListItemButton, ListItemText } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import { cartItemCountSelector } from 'components/Cart/selector';
 import { useState } from 'react';
