@@ -1,6 +1,6 @@
 import { AccountCircle, Close, ShoppingCart } from '@mui/icons-material';
 import MenuIcon from '@mui/icons-material/Menu';
-import { Badge, Menu, MenuItem } from '@mui/material';
+import { Badge, Menu, MenuItem, useMediaQuery, useTheme } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -12,11 +12,12 @@ import Typography from '@mui/material/Typography';
 import Login from 'components/Auth/Login';
 import Register from 'components/Auth/Register';
 import { logout } from 'components/Auth/userSlice';
+import { cartItemCountSelector } from 'components/Cart/selector';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import './styles.scss';
-import { cartItemCountSelector } from 'components/Cart/selector';
+import DrawerComp from './Drawer';
 
 const MODE = {
   LOGIN: 'login',
@@ -25,6 +26,8 @@ const MODE = {
 
 export default function Header() {
   const cartItemCount = useSelector(cartItemCountSelector);
+  const theme = useTheme();
+  const isMatch = useMediaQuery(theme.breakpoints.down('md'));
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const LoggedInUser = useSelector((state) => state.user.current);
@@ -60,36 +63,43 @@ export default function Header() {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          <MenuIcon className="menuButton" />
+          {isMatch ? (
+            <>
+              <DrawerComp isLoggedIn={isLoggedIn} onClickOpen={handleClickOpen} onClickClose={handleUserClick} />
+            </>
+          ) : (
+            <>
+              <MenuIcon className="menuButton" />
+              <Typography component="div" className="title">
+                <Link className="link" to="/">
+                  Manh Tai
+                </Link>
+              </Typography>
 
-          <Typography component="div" className="title">
-            <Link className="link" to="/">
-              Manh Tai
-            </Link>
-          </Typography>
+              <NavLink to="/products" className="link">
+                <Button color="inherit">Products</Button>
+              </NavLink>
+              <NavLink to="/counter" className="link">
+                <Button color="inherit">Counter</Button>
+              </NavLink>
 
-          <NavLink to="/products" className="link">
-            <Button color="inherit">Products</Button>
-          </NavLink>
-          <NavLink to="/counter" className="link">
-            <Button color="inherit">Counter</Button>
-          </NavLink>
+              <IconButton size="large" aria-label="show 4 new mails" color="inherit" onClick={handleCartClick}>
+                <Badge badgeContent={cartItemCount} color="error">
+                  <ShoppingCart />
+                </Badge>
+              </IconButton>
 
-          <IconButton size="large" aria-label="show 4 new mails" color="inherit" onClick={handleCartClick}>
-            <Badge badgeContent={cartItemCount} color="error">
-              <ShoppingCart />
-            </Badge>
-          </IconButton>
-
-          {!isLoggedIn && (
-            <Button onClick={handleClickOpen} color="inherit">
-              Login
-            </Button>
-          )}
-          {isLoggedIn && (
-            <IconButton color="inherit" onClick={handleUserClick}>
-              <AccountCircle />
-            </IconButton>
+              {!isLoggedIn && (
+                <Button onClick={handleClickOpen} color="inherit">
+                  Login
+                </Button>
+              )}
+              {isLoggedIn && (
+                <IconButton color="inherit" onClick={handleUserClick}>
+                  <AccountCircle />
+                </IconButton>
+              )}
+            </>
           )}
         </Toolbar>
 

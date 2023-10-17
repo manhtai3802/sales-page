@@ -1,4 +1,4 @@
-import { Box, Container, Grid, Pagination, Paper } from '@mui/material';
+import { Box, Container, Grid, Pagination, Paper, useMediaQuery, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import FilterViewer from 'Product/components/FilterViewer';
 import ProductFilter from 'Product/components/ProductFilter';
@@ -30,6 +30,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function ListPages(props) {
+  const theme = useTheme();
+  const isMatch = useMediaQuery(theme.breakpoints.down('md'));
   const [productList, setProductList] = useState([]);
   const navigate = useNavigate();
   const location = useLocation();
@@ -111,11 +113,16 @@ function ListPages(props) {
     <Box>
       <Container>
         <Grid container spacing={1}>
-          <Grid item className={classes.left}>
-            <Paper elevation={0}>
-              <ProductFilter filters={queryParams} onChange={handleFilterChange} />
-            </Paper>
-          </Grid>
+          {isMatch ? (
+            <></>
+          ) : (
+            <Grid item className={classes.left}>
+              <Paper elevation={0}>
+                <ProductFilter filters={queryParams} onChange={handleFilterChange} />
+              </Paper>
+            </Grid>
+          )}
+
           <Grid item className={classes.right}>
             <Paper elevation={0}>
               <ProductSort currentSort={queryParams._sort} onChange={handleSortChange} />
